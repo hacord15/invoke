@@ -5,7 +5,12 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 async function main() {
   const completion = await groq.chat.completions.create({
     temperature: 1,
-    top_p: 1,
+   // top_p: 1,
+  //  stop: "ga",  //Ne
+  //  max_completion_tokens: 1000,
+  //  max_tokens: "",
+  //  frequency_penalty: 0,
+  //  presence_penalty: 0,
     model: "llama-3.3-70b-versatile",
     messages: [
        {
