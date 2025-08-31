@@ -4,30 +4,69 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 async function main() {
   const completion = await groq.chat.completions.create({
-    temperature: 1,
-   // top_p: 1,
-  //  stop: "ga",  //Ne
-  //  max_completion_tokens: 1000,
-  //  max_tokens: "",
-  //  frequency_penalty: 0,
-  //  presence_penalty: 0,
     model: "llama-3.3-70b-versatile",
+    temperature: 0,
     messages: [
-       {
+      {
         role: "system",
-        content: 'You are Jarvis, a smart review grader. Your task is to analyse given review and return the sentiment. Classify the review as positive, neutral or negative. Output must be a single word.',
-      
+        content: `You are a smart assistant who answers the asked questions.
+        1. searchWeb({query}: {query:string}) // Search the latest information and realtime data on the internet`
       },
-      { 
-        role: "user", 
-        content: 'Review: These headphones arrived quickly and look great, but the left earcup stopped working after a week '
-      }, 
-    
-      
+      {
+        role: "user",
+        content: "When was iPhone 16 launched?"
+      }
     ],
+    tools: [
+     {
+      "type": "function",
+      "function": {
+        "name": "webSearch",
+        "description": "Search the latest information and realtime data on the internet",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "The search query to perform search on."
+            },
+          
+          },
+          "required": ["query"]
+        }
+      }
+    }
+    ],
+    tool_choice: "auto"
   });
 
-  console.log(completion.choices[0].message.content);
+  
+const toolCalls = completion.choices[0].message.tool_calls
+if(!toolCalls){
+  console.log(`Final Answer: ${completion.choices[0].message.content}`);
+  return;
+}
+
+for (const tool of toolCalls) {
+  console.log('toolL:',tool)
+  const functionName = tool.function.name;
+  const functionParams = tool.function.arguments;
+
+  if (functionName === "webSearch") {
+   const toolResult = await webSearch(JSON.parse(functionParams));
+    console.log('toolResult:',toolResult);
+  }
+}
+
+  console.log(JSON.stringify(completion.choices[0].message, null, 2));
 }
 
 main();
+
+
+
+async function webSearch({query}) { 
+  // here we will dp tavily api call
+  console.log("Calling the web");
+   return 'Iphone 16 was launched on 20 september 2024';
+   }
