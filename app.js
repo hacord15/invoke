@@ -23,10 +23,7 @@ async function main() {
         current date: ${new Date().toUTCString()}`
         // `
       },
-      // {
-      //   role: "user",
-      //   content: "Weather of mumbai today?"
-      // }
+     
     ];
 
 
