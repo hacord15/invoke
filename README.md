@@ -1,3 +1,29 @@
+# 🧠 AI Chatbot with Groq + Tavily + Node.js
+
+**A real-time AI assistant that combines Groq LLM reasoning with Tavily web search to deliver accurate, context-aware, and up-to-date answers.**  
+
+This project demonstrates how to integrate a large language model (Groq) with an external web-search tool (Tavily) and lightweight session caching to build a chat experience that can both reason from its model knowledge and fetch live information when needed. It includes a minimal frontend and a Node.js backend that handles conversation state, automatic tool calls for web searches, and caching to improve responsiveness and reduce redundant requests.
+
+**Key features**
+- LLM-powered conversational responses (Groq `llama-3.3-70b-versatile` in examples)
+- Automatic, on-demand web search via Tavily when the model needs fresh or time-sensitive information
+- Conversation memory using an in-memory cache to keep context across turns
+- Clear response guidelines and tool-driven search strategy so the assistant knows *when* to search
+- Minimal, practical setup ideal for prototyping or learning integrations of LLMs + live data
+
+**Tech stack**
+- Node.js + Express (backend)
+- Groq SDK (LLM)
+- Tavily API (real-time web search)
+- node-cache (session caching)
+- Plain HTML/JS frontend for quick testing
+
+**Who it's for**
+- Developers prototyping LLM + tool integrations  
+- Teams building chat assistants that require both reasoning and live-data lookups  
+- Learners who want a compact example of model-tool-calling and session memory
+
+
 ## OpenAI Parameters Explained
 
 ### 1. `temperature`
