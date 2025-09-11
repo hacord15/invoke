@@ -1,4 +1,4 @@
-import readline from "readline/promises";
+
 import Groq from "groq-sdk";
 import { tavily } from "@tavily/core";
 import NodeCache from "node-cache";
@@ -10,7 +10,7 @@ const tvly = tavily({
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-const cache = new NodeCache({ stdTTL: 60 * 60 * 24 }); // 24 hours TTL
+const cache = new NodeCache({ stdTTL: 60 * 60 * 24 }); // 24 hours TTL (time to live)
 
 
 export async function generate(userMessage , threadId) {
@@ -81,7 +81,16 @@ Remember: Your goal is to be maximally helpful while maintaining accuracy and re
       content: userMessage,
     });
 
+    const MAX_RETRIES = 10;
+    let count = 0;
+
     while (true) {
+
+
+      if (count >= MAX_RETRIES) {
+        return "Error: Maximum retry limit reached. Please try again later.";
+      }
+      count++;
       const completion = await groq.chat.completions.create({
         model: "llama-3.3-70b-versatile",
         temperature: 0,
@@ -115,6 +124,8 @@ Remember: Your goal is to be maximally helpful while maintaining accuracy and re
 
       if (!toolCalls) {
         // here we end the chatbot response 
+        cache.set(threadId, messages);
+        console.log(cache);
        return completion.choices[0].message.content;
       }
 
