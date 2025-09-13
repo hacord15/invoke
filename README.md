@@ -58,7 +58,6 @@ This project demonstrates how to integrate a large language model (Groq) with an
 - Range: `-2.0` to `2.0`.
 - Higher = less repetition.
 
-### 7.
 ### 7. `presence_penalty`
 - Controls how much the model is encouraged to **talk about new topics**.
 - Range: `-2.0` to `2.0`.
